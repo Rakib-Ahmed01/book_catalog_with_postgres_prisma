@@ -1,7 +1,7 @@
 import express from 'express';
 import { auth } from '../../middlewares/auth';
 import { validateRequest } from '../../middlewares/validateRequest';
-import { createCategory } from './category.controller';
+import { createCategory, getAllCategories } from './category.controller';
 import { createCategoryZodSchema } from './category.validation';
 
 export const categoryrouter = express.Router();
@@ -18,4 +18,5 @@ categoryrouter
     validateRequest(createCategoryZodSchema),
     auth(['admin']),
     createCategory,
-  );
+  )
+  .get(getAllCategories);
