@@ -3,7 +3,7 @@ import expressAsyncHandler from 'express-async-handler';
 import { StatusCodes } from 'http-status-codes';
 import { LoginResponse } from '../../types/LoginResponse';
 import { sendResponse } from '../../utils/sendResponse';
-import { TUser } from '../user/user.interface';
+import { IUser } from '../user/user.interface';
 import {
   loginUserService,
   refreshTokenService,
@@ -14,13 +14,13 @@ export const registerUser = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const user = await registerUserService(req.body);
 
-    sendResponse<Omit<TUser, 'password'>>(res, {
-      statusCode: StatusCodes.OK,
+    sendResponse<Omit<IUser, 'password'>>(res, {
+      statusCode: StatusCodes.CREATED,
       message: 'User created successfully',
       success: true,
       data: user,
     });
-  }
+  },
 );
 
 export const loginUser = expressAsyncHandler(async (req, res) => {

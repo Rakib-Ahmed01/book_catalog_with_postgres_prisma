@@ -3,26 +3,30 @@ import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import { Schema } from 'mongoose';
 import env from '../../config';
+import prisma from '../../lib/prisma';
 import { generateJwtTokens } from '../../utils/generateJwtTokens';
 import throwApiError from '../../utils/throwApiError';
-import { TUser } from '../user/user.interface';
+import { IUser } from '../user/user.interface';
 import User from '../user/user.model';
-// import { Prisma, PrismaClient } from '@prisma/client';
 
-// const prisma = new PrismaClient()
-
-// type IUser = Prisma.UserCreateInput;
-
-export const registerUserService = async (user: TUser) => {
-  const userExists = await User.findOne({ email: user.email }).lean();
+export const registerUserService = async (user: IUser) => {
+  const userExists = await prisma.user.findFirst({
+    where: {
+      email: user.email,
+    },
+  });
 
   if (userExists) {
     throwApiError(StatusCodes.CONFLICT, 'User already exists with the email');
   }
 
-  const createdUser = await User.create(user);
+  const createdUser = await prisma.user.create({
+    data: user,
+  });
+
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  const { password, ...withoutPassword } = createdUser.toObject();
+  const { password, ...withoutPassword } = createdUser;
+
   return withoutPassword;
 };
 
