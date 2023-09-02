@@ -8,6 +8,7 @@ import {
   createBookService,
   deleteBookService,
   getAllBooksService,
+  getBooksByCategoryService,
   getSingleBookService,
   updateBookService,
 } from './book.services';
@@ -32,6 +33,20 @@ export const getAllBooks = expressAsyncHandler(
     sendResponse<ICategory>(res, {
       statusCode: StatusCodes.CREATED,
       message: 'Books retrieved successfully',
+      success: true,
+      data: books,
+    });
+  },
+);
+
+export const getBooksByCategory = expressAsyncHandler(
+  async (req: Request, res: Response) => {
+    const { categoryId } = req.params;
+    const books = await getBooksByCategoryService(categoryId);
+
+    sendResponse<ICategory>(res, {
+      statusCode: StatusCodes.CREATED,
+      message: 'Books with associated category data fetched successfully',
       success: true,
       data: books,
     });

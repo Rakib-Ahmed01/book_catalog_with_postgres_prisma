@@ -28,6 +28,26 @@ export const getSingleBookService = async (id: string) => {
   return book;
 };
 
+export const getBooksByCategoryService = async (categoryId: string) => {
+  const category = await prisma.category.findFirst({
+    where: {
+      id: categoryId,
+    },
+  });
+
+  if (!category) {
+    throwApiError(StatusCodes.NOT_FOUND, 'Category not found');
+  }
+
+  const books = await prisma.book.findMany({
+    where: {
+      categoryId,
+    },
+  });
+
+  return books;
+};
+
 export const updateBookService = async (
   id: string,
   payload: Partial<IBook>,
