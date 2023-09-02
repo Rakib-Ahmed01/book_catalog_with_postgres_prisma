@@ -12,13 +12,13 @@ export const authRouter = express.Router();
 authRouter.post(
   '/signup',
   validateRequest(registerUserZodSchema),
-  registerUser
+  registerUser,
 );
 
-authRouter.post('/login', validateRequest(loginUserZodSchema), loginUser);
+authRouter.post('/signin', validateRequest(loginUserZodSchema), loginUser);
 
 authRouter.get(
   '/refresh-token',
   validateRequest(refreshTokenZodSchema),
-  refreshToken
+  refreshToken,
 );

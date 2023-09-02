@@ -37,7 +37,7 @@ export const loginUserService = async (payload: {
   password: string;
 }) => {
   const { email, password } = payload;
-  const user = await User.findOne({ email }).select('password email').lean();
+  const user = await prisma.user.findFirst({ where: { email } });
 
   if (!user) {
     throwApiError(StatusCodes.NOT_FOUND, `User not found`);
@@ -46,13 +46,12 @@ export const loginUserService = async (payload: {
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
-    throwApiError(StatusCodes.BAD_REQUEST, 'Incorrect password');
+    throwApiError(StatusCodes.UNAUTHORIZED, 'Incorrect password');
   }
 
   const { accessToken, refreshToken } = generateJwtTokens({
-    name: user?.name,
-    email: user?.email,
-    _id: user?._id,
+    role: user.role,
+    userId: user.id,
   });
 
   return {

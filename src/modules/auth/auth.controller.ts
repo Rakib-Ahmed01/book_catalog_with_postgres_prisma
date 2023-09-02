@@ -35,7 +35,7 @@ export const loginUser = expressAsyncHandler(async (req, res) => {
     success: true,
     statusCode: StatusCodes.OK,
     message: 'User logged in successfully',
-    data: { accessToken },
+    data: { token: accessToken },
   });
 });
 
@@ -53,6 +53,6 @@ export const refreshToken = expressAsyncHandler(async (req, res) => {
     success: true,
     statusCode: StatusCodes.OK,
     message: 'New access token generated successfully!',
-    data: { accessToken },
+    data: { token: accessToken },
   });
 });
