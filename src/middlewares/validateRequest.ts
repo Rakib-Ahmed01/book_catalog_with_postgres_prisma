@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { ZodSchema } from "zod";
+import { NextFunction, Request, Response } from 'express';
+import { ZodSchema } from 'zod';
 
 export const validateRequest = (schema: ZodSchema) => {
   return async (req: Request, _res: Response, next: NextFunction) => {
@@ -7,6 +7,7 @@ export const validateRequest = (schema: ZodSchema) => {
       await schema.parseAsync({
         body: req.body,
         cookies: req.cookies,
+        params: req.params,
       });
       return next();
     } catch (error) {
