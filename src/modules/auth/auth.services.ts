@@ -7,6 +7,11 @@ import { generateJwtTokens } from '../../utils/generateJwtTokens';
 import throwApiError from '../../utils/throwApiError';
 import { TUser } from '../user/user.interface';
 import User from '../user/user.model';
+// import { Prisma, PrismaClient } from '@prisma/client';
+
+// const prisma = new PrismaClient()
+
+// type IUser = Prisma.UserCreateInput;
 
 export const registerUserService = async (user: TUser) => {
   const userExists = await User.findOne({ email: user.email }).lean();
