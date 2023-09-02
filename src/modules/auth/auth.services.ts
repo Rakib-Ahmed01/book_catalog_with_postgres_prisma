@@ -9,7 +9,7 @@ import throwApiError from '../../utils/throwApiError';
 import { IUser } from '../user/user.interface';
 
 export const registerUserService = async (user: IUser) => {
-  const userExists = await prisma.user.findUnique({
+  const userExists = await prisma.user.findFirst({
     where: {
       email: user.email,
     },
@@ -36,7 +36,7 @@ export const loginUserService = async (payload: {
   password: string;
 }) => {
   const { email, password } = payload;
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.user.findFirst({ where: { email } });
 
   if (!user) {
     throwApiError(StatusCodes.NOT_FOUND, `User not found`);
@@ -73,7 +73,7 @@ export const refreshTokenService = async (refreshToken: string) => {
 
   const { role, userId } = decodedData;
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findFirst({
     where: {
       id: userId,
     },

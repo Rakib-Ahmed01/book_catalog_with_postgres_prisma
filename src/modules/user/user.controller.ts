@@ -11,7 +11,7 @@ export const getAllUsers = expressAsyncHandler(
 
     sendResponse<IUser>(res, {
       statusCode: StatusCodes.CREATED,
-      message: 'User created successfully',
+      message: 'User retrieved successfully',
       success: true,
       data: users,
     });
