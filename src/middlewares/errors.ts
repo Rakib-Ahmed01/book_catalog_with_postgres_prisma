@@ -23,6 +23,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
   const errors: GenericErrorMessage[] = [];
   let status = error?.status ? error.status : 500;
 
+  // eslint-disable-next-line no-console
   console.log(error);
 
   const errorResponse = {
@@ -37,6 +38,15 @@ export const globalErrorHandler: ErrorRequestHandler = (
     status = simplifiedError.status;
     errorResponse.message = simplifiedError.message;
     errorResponse.errors = simplifiedError.errors;
+  } else if (error instanceof Prisma.PrismaClientValidationError) {
+    status = 400;
+    errorResponse.errors = [
+      {
+        path: '',
+        message: error.message,
+      },
+    ];
+    errorResponse.message = 'Validation Error';
   } else if (error instanceof ZodError) {
     const simplifiedError = handleZodValidationError(error);
     status = simplifiedError.status;
