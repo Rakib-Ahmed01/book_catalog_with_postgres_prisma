@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { sendResponse } from '../../utils/sendResponse';
 import { IUser } from './user.interface';
 import {
+  deleteUserService,
   getAllUsersService,
   getSingleUserService,
   updateUserService,
@@ -46,6 +47,20 @@ export const updateUser = expressAsyncHandler(
       message: 'User updated successfully',
       success: true,
       data: updatedUser,
+    });
+  },
+);
+
+export const deleteUser = expressAsyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const deletedUser = await deleteUserService(id);
+
+    sendResponse<IUser>(res, {
+      statusCode: StatusCodes.OK,
+      message: 'User deleted successfully',
+      success: true,
+      data: deletedUser,
     });
   },
 );

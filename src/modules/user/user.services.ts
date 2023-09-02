@@ -47,3 +47,21 @@ export const updateUserService = async (
     data: payload,
   });
 };
+
+export const deleteUserService = async (id: string) => {
+  const user = await prisma.user.findFirst({
+    where: {
+      id,
+    },
+  });
+
+  if (!user) {
+    throwApiError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+
+  return await prisma.user.delete({
+    where: {
+      id,
+    },
+  });
+};
