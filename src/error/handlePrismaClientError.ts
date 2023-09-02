@@ -23,10 +23,15 @@ export const handlePrismaClientError = (
       message: (error.meta?.cause as string) || 'Record not found!',
     });
   } else if (error.code === 'P2003') {
-    if (error.message.includes('delete()` invocation:')) {
+    if (error.message.includes('delete()` invocation')) {
       errors.push({
         path: '',
-        message: 'Delete failed',
+        message: 'Delete failed. Refrential error.',
+      });
+    } else if (error.message.includes('create()` invocation')) {
+      errors.push({
+        path: '',
+        message: 'Invalid foreign key',
       });
     }
   }

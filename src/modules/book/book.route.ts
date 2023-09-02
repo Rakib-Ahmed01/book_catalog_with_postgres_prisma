@@ -2,27 +2,23 @@ import express from 'express';
 import { auth } from '../../middlewares/auth';
 import { validateRequest } from '../../middlewares/validateRequest';
 import {
-  createCategory,
+  createBook,
   deleteCategory,
   getAllCategories,
   getSingleCategory,
   updateCategory,
-} from './category.controller';
-import { createCategoryZodSchema } from './category.validation';
+} from './book.controller';
+import { createBookZodSchema } from './book.validation';
 
-export const categoryRouter = express.Router();
+export const bookRouter = express.Router();
 
-categoryRouter
+bookRouter
   .route('/:id')
   .get(auth(['admin']), getSingleCategory)
   .patch(auth(['admin']), updateCategory)
   .delete(auth(['admin']), deleteCategory);
 
-categoryRouter
+bookRouter
   .route('/')
-  .post(
-    validateRequest(createCategoryZodSchema),
-    auth(['admin']),
-    createCategory,
-  )
+  .post(validateRequest(createBookZodSchema), auth(['admin']), createBook)
   .get(getAllCategories);
