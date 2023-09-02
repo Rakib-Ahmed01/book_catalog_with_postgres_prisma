@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 import env from '../config';
+import { JwtPayload } from '../types/JwtPayload';
 
-export const generateJwtTokens = (payload: Record<string, unknown>) => {
+export const generateJwtTokens = (payload: JwtPayload) => {
   const accessToken = jwt.sign(payload, env.accessTokenSecret, {
     expiresIn: '365d',
   });

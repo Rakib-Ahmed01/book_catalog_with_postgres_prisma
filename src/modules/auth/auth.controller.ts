@@ -34,7 +34,7 @@ export const loginUser = expressAsyncHandler(async (req, res) => {
   sendResponse<LoginResponse>(res, {
     success: true,
     statusCode: StatusCodes.OK,
-    message: 'User logged in successfully',
+    message: 'User signin successful',
     data: { token: accessToken },
   });
 });

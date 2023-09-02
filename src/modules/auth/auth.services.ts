@@ -1,16 +1,15 @@
 import bcrypt from 'bcrypt';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
-import { Schema } from 'mongoose';
 import env from '../../config';
 import prisma from '../../lib/prisma';
+import { JwtPayload } from '../../types/JwtPayload';
 import { generateJwtTokens } from '../../utils/generateJwtTokens';
 import throwApiError from '../../utils/throwApiError';
 import { IUser } from '../user/user.interface';
-import User from '../user/user.model';
 
 export const registerUserService = async (user: IUser) => {
-  const userExists = await prisma.user.findFirst({
+  const userExists = await prisma.user.findUnique({
     where: {
       email: user.email,
     },
@@ -37,7 +36,7 @@ export const loginUserService = async (payload: {
   password: string;
 }) => {
   const { email, password } = payload;
-  const user = await prisma.user.findFirst({ where: { email } });
+  const user = await prisma.user.findUnique({ where: { email } });
 
   if (!user) {
     throwApiError(StatusCodes.NOT_FOUND, `User not found`);
@@ -61,33 +60,32 @@ export const loginUserService = async (payload: {
 };
 
 export const refreshTokenService = async (refreshToken: string) => {
-  let decodedData = {} as {
-    name: string;
-    email: string;
-    _id: Schema.Types.ObjectId;
-  };
+  let decodedData = {} as JwtPayload;
 
   try {
-    decodedData = jwt.verify(refreshToken, env.refreshTokenSecret) as {
-      email: string;
-      _id: Schema.Types.ObjectId;
-      name: string;
-    };
+    decodedData = jwt.verify(
+      refreshToken,
+      env.refreshTokenSecret,
+    ) as JwtPayload;
   } catch (error) {
     throwApiError(StatusCodes.FORBIDDEN, 'Invalid token');
   }
 
-  const { _id, email } = decodedData;
+  const { role, userId } = decodedData;
 
-  const user = await User.findOne({ _id, email });
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
 
   if (!user) {
     throwApiError(StatusCodes.NOT_FOUND, `User not found`);
   }
 
   const { accessToken, refreshToken: newRefreshToken } = generateJwtTokens({
-    email,
-    _id,
+    role,
+    userId,
   });
 
   return { accessToken, newRefreshToken };
