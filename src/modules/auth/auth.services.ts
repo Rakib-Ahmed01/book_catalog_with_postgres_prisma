@@ -20,6 +20,8 @@ export const registerUserService = async (user: IUser) => {
     throwApiError(StatusCodes.CONFLICT, 'User already exists with the email');
   }
 
+  user.password = await bcrypt.hash(user.password, 10);
+
   const createdUser = await prisma.user.create({
     data: user,
   });
