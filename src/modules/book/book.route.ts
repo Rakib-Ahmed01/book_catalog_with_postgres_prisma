@@ -5,7 +5,7 @@ import {
   createBook,
   deleteCategory,
   getAllBooks,
-  getSingleCategory,
+  getSingleBook,
   updateCategory,
 } from './book.controller';
 import { createBookZodSchema } from './book.validation';
@@ -14,7 +14,7 @@ export const bookRouter = express.Router();
 
 bookRouter
   .route('/:id')
-  .get(auth(['admin']), getSingleCategory)
+  .get(auth(['admin']), getSingleBook)
   .patch(auth(['admin']), updateCategory)
   .delete(auth(['admin']), deleteCategory);
 
