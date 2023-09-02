@@ -3,7 +3,7 @@ import expressAsyncHandler from 'express-async-handler';
 import { StatusCodes } from 'http-status-codes';
 import { sendResponse } from '../../utils/sendResponse';
 import { IUser } from './user.interface';
-import { getAllUsersService } from './user.services';
+import { getAllUsersService, getSingleUserService } from './user.services';
 
 export const getAllUsers = expressAsyncHandler(
   async (_req: Request, res: Response) => {
@@ -11,9 +11,23 @@ export const getAllUsers = expressAsyncHandler(
 
     sendResponse<IUser>(res, {
       statusCode: StatusCodes.CREATED,
-      message: 'User retrieved successfully',
+      message: 'Users retrieved successfully',
       success: true,
       data: users,
+    });
+  },
+);
+
+export const getSingleUser = expressAsyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const user = await getSingleUserService(id);
+
+    sendResponse<IUser>(res, {
+      statusCode: StatusCodes.CREATED,
+      message: 'User retrieved successfully',
+      success: true,
+      data: user,
     });
   },
 );
