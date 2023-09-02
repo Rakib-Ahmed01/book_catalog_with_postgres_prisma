@@ -1,9 +1,9 @@
+import { Prisma } from '@prisma/client';
 import { ErrorRequestHandler, RequestHandler } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { ZodError } from 'zod';
 import { ApiError } from '../error/ApiError';
-import { handleMongoServerError } from '../error/handleMongoServerError';
-import { handleValidationError } from '../error/handleMongooseValidationError';
+import { handlePrismaClientError } from '../error/handlePrismaClientError';
 import { handleZodValidationError } from '../error/handleZodValidationError';
 import { GenericErrorMessage } from '../types/GenericErrorMessage';
 import throwApiError from '../utils/throwApiError';
@@ -18,7 +18,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
   _req,
   res,
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  _next
+  _next,
 ) => {
   const errors: GenericErrorMessage[] = [];
   let status = error?.status ? error.status : 500;
@@ -32,8 +32,8 @@ export const globalErrorHandler: ErrorRequestHandler = (
     stack: process.env.NODE_ENV !== 'production' ? error?.stack : null,
   };
 
-  if (error?.name === 'ValidationError') {
-    const simplifiedError = handleValidationError(error);
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    const simplifiedError = handlePrismaClientError(error);
     status = simplifiedError.status;
     errorResponse.message = simplifiedError.message;
     errorResponse.errors = simplifiedError.errors;
@@ -45,19 +45,6 @@ export const globalErrorHandler: ErrorRequestHandler = (
   } else if (error instanceof ApiError) {
     errorResponse.message = error.message;
     errorResponse.errors = [{ path: '', message: error.message }];
-  } else if (error.name === 'CastError') {
-    errorResponse.message = `Invalid ${error.path}`;
-    errorResponse.errors = [
-      {
-        path: error.path,
-        message: `Invalid ${error.path}`,
-      },
-    ];
-  } else if (error.name === 'MongoServerError') {
-    const simplifiedError = handleMongoServerError(error);
-    status = simplifiedError.status;
-    errorResponse.message = simplifiedError.message;
-    errorResponse.errors = simplifiedError.errors;
   } else if (error instanceof Error) {
     errorResponse.message = error?.message
       ? error.message
