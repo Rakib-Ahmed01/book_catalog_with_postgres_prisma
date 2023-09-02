@@ -9,7 +9,7 @@ import {
   deleteCategoryService,
   getAllBooksService,
   getSingleBookService,
-  updateCategoryService,
+  updateBookService,
 } from './book.services';
 
 export const createBook = expressAsyncHandler(
@@ -52,16 +52,16 @@ export const getSingleBook = expressAsyncHandler(
   },
 );
 
-export const updateCategory = expressAsyncHandler(
+export const updateBook = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    const updatedCategory = await updateCategoryService(id, req.body);
+    const updatedBook = await updateBookService(id, req.body);
 
-    sendResponse<ICategory>(res, {
+    sendResponse<IBook>(res, {
       statusCode: StatusCodes.OK,
-      message: 'Category updated successfully',
+      message: 'Book updated successfully',
       success: true,
-      data: updatedCategory,
+      data: updatedBook,
     });
   },
 );

@@ -2,7 +2,6 @@ import { StatusCodes } from 'http-status-codes';
 import prisma from '../../lib/prisma';
 import { isEmptyObject } from '../../utils/isEmptyObject';
 import throwApiError from '../../utils/throwApiError';
-import { ICategory } from '../category/category.interface';
 import { IBook } from './book.interface';
 
 export const createBookService = async (book: IBook) => {
@@ -29,25 +28,25 @@ export const getSingleBookService = async (id: string) => {
   return book;
 };
 
-export const updateCategoryService = async (
+export const updateBookService = async (
   id: string,
-  payload: Partial<ICategory>,
+  payload: Partial<IBook>,
 ) => {
   if (isEmptyObject(payload)) {
     throwApiError(StatusCodes.BAD_REQUEST, 'Missing update data');
   }
 
-  const category = await prisma.category.findFirst({
+  const book = await prisma.book.findFirst({
     where: {
       id,
     },
   });
 
-  if (!category) {
-    throwApiError(StatusCodes.NOT_FOUND, 'Category not found');
+  if (!book) {
+    throwApiError(StatusCodes.NOT_FOUND, 'Book not found');
   }
 
-  return await prisma.category.update({
+  return await prisma.book.update({
     where: {
       id,
     },
