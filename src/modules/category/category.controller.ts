@@ -5,6 +5,7 @@ import { sendResponse } from '../../utils/sendResponse';
 import { ICategory } from './category.interface';
 import {
   createCategoryService,
+  deleteCategoryService,
   getAllCategoriesService,
   getSingleCategoryService,
   updateCategoryService,
@@ -60,6 +61,20 @@ export const updateCategory = expressAsyncHandler(
       message: 'Category updated successfully',
       success: true,
       data: updatedCategory,
+    });
+  },
+);
+
+export const deleteCategory = expressAsyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const deletedCategory = await deleteCategoryService(id);
+
+    sendResponse<ICategory>(res, {
+      statusCode: StatusCodes.OK,
+      message: 'Category deleted successfully',
+      success: true,
+      data: deletedCategory,
     });
   },
 );

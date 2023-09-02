@@ -53,3 +53,21 @@ export const updateCategoryService = async (
     data: payload,
   });
 };
+
+export const deleteCategoryService = async (id: string) => {
+  const category = await prisma.category.findFirst({
+    where: {
+      id,
+    },
+  });
+
+  if (!category) {
+    throwApiError(StatusCodes.NOT_FOUND, 'Category not found');
+  }
+
+  return await prisma.category.delete({
+    where: {
+      id,
+    },
+  });
+};

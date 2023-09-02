@@ -3,6 +3,7 @@ import { auth } from '../../middlewares/auth';
 import { validateRequest } from '../../middlewares/validateRequest';
 import {
   createCategory,
+  deleteCategory,
   getAllCategories,
   getSingleCategory,
   updateCategory,
@@ -14,8 +15,8 @@ export const categoryrouter = express.Router();
 categoryrouter
   .route('/:id')
   .get(auth(['admin']), getSingleCategory)
-  .patch(auth(['admin']), updateCategory);
-//   .delete(auth(['admin']), deleteUser);
+  .patch(auth(['admin']), updateCategory)
+  .delete(auth(['admin']), deleteCategory);
 
 categoryrouter
   .route('/')
