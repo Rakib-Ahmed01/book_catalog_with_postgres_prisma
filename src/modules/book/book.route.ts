@@ -4,7 +4,7 @@ import { validateRequest } from '../../middlewares/validateRequest';
 import {
   createBook,
   deleteCategory,
-  getAllCategories,
+  getAllBooks,
   getSingleCategory,
   updateCategory,
 } from './book.controller';
@@ -21,4 +21,4 @@ bookRouter
 bookRouter
   .route('/')
   .post(validateRequest(createBookZodSchema), auth(['admin']), createBook)
-  .get(getAllCategories);
+  .get(getAllBooks);
