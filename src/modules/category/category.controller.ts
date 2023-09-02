@@ -7,6 +7,7 @@ import {
   createCategoryService,
   getAllCategoriesService,
   getSingleCategoryService,
+  updateCategoryService,
 } from './category.services';
 
 export const createCategory = expressAsyncHandler(
@@ -45,6 +46,20 @@ export const getSingleCategory = expressAsyncHandler(
       message: 'Category retrieved successfully',
       success: true,
       data: category,
+    });
+  },
+);
+
+export const updateCategory = expressAsyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const updatedCategory = await updateCategoryService(id, req.body);
+
+    sendResponse<ICategory>(res, {
+      statusCode: StatusCodes.OK,
+      message: 'Category updated successfully',
+      success: true,
+      data: updatedCategory,
     });
   },
 );
