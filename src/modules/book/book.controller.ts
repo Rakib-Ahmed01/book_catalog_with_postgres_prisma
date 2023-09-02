@@ -6,7 +6,7 @@ import { ICategory } from '../category/category.interface';
 import { IBook } from './book.interface';
 import {
   createBookService,
-  deleteCategoryService,
+  deleteBookService,
   getAllBooksService,
   getSingleBookService,
   updateBookService,
@@ -66,16 +66,16 @@ export const updateBook = expressAsyncHandler(
   },
 );
 
-export const deleteCategory = expressAsyncHandler(
+export const deleteBook = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    const deletedCategory = await deleteCategoryService(id);
+    const deletedBook = await deleteBookService(id);
 
-    sendResponse<ICategory>(res, {
+    sendResponse<IBook>(res, {
       statusCode: StatusCodes.OK,
-      message: 'Category deleted successfully',
+      message: 'Book deleted successfully',
       success: true,
-      data: deletedCategory,
+      data: deletedBook,
     });
   },
 );

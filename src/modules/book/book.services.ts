@@ -54,18 +54,18 @@ export const updateBookService = async (
   });
 };
 
-export const deleteCategoryService = async (id: string) => {
-  const category = await prisma.category.findFirst({
+export const deleteBookService = async (id: string) => {
+  const book = await prisma.book.findFirst({
     where: {
       id,
     },
   });
 
-  if (!category) {
-    throwApiError(StatusCodes.NOT_FOUND, 'Category not found');
+  if (!book) {
+    throwApiError(StatusCodes.NOT_FOUND, 'Book not found');
   }
 
-  return await prisma.category.delete({
+  return await prisma.book.delete({
     where: {
       id,
     },

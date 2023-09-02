@@ -3,7 +3,7 @@ import { auth } from '../../middlewares/auth';
 import { validateRequest } from '../../middlewares/validateRequest';
 import {
   createBook,
-  deleteCategory,
+  deleteBook,
   getAllBooks,
   getSingleBook,
   updateBook,
@@ -16,7 +16,7 @@ bookRouter
   .route('/:id')
   .get(auth(['admin']), getSingleBook)
   .patch(auth(['admin']), updateBook)
-  .delete(auth(['admin']), deleteCategory);
+  .delete(auth(['admin']), deleteBook);
 
 bookRouter
   .route('/')
