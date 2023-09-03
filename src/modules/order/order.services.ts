@@ -5,7 +5,6 @@ import throwApiError from '../../utils/throwApiError';
 import { IOrder } from './order.interface';
 
 export const createOrderService = async (order: IOrder, userId: string) => {
-  console.log({ order: order });
   return await prisma.order.create({
     data: {
       userId,
@@ -25,12 +24,19 @@ export const getAllOrdersService = async (jwtPayload: JwtPayload) => {
   });
 };
 
-export const getSingleOrderService = async (id: string) => {
+export const getSingleOrderService = async (
+  id: string,
+  jwtPayload: JwtPayload,
+) => {
   const order = await prisma.order.findFirst({
     where: {
       id,
     },
   });
+
+  if (order.userId !== jwtPayload.userId) {
+    throwApiError(StatusCodes.FORBIDDEN, 'Forbidden');
+  }
 
   if (!order) {
     throwApiError(StatusCodes.NOT_FOUND, 'Order not found');

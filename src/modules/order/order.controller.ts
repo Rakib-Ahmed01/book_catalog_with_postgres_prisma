@@ -44,7 +44,8 @@ export const getAllOrders = expressAsyncHandler(
 export const getSingleOrder = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    const order = await getSingleOrderService(id);
+    const jwtPayload = req.jwtPayload;
+    const order = await getSingleOrderService(id, jwtPayload as JwtPayload);
 
     sendResponse<IOrder>(res, {
       statusCode: StatusCodes.CREATED,
