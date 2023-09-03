@@ -1,6 +1,6 @@
-import { ZodError } from "zod";
-import { GenericErrorMessage } from "../types/GenericErrorMessage";
-import { ValidationErrorResponse } from "../types/ValidationErrorResponse";
+import { ZodError } from 'zod';
+import { GenericErrorMessage } from '../types/GenericErrorMessage';
+import { ValidationErrorResponse } from '../types/ValidationErrorResponse';
 
 export const handleZodValidationError = (
   error: ZodError,
@@ -14,7 +14,7 @@ export const handleZodValidationError = (
 
   return {
     status: 400,
-    message: "Validation Error",
+    message: 'Validation Error',
     errors,
   };
 };
