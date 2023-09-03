@@ -44,7 +44,7 @@ model Book {
   genre           String
   publicationDate String?
   categoryId      String
-  category        Category          @relation(fields: [categoryId], references: [id])
+  category        Category?         @relation(fields: [categoryId], references: [id])
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   ReviewAndRating ReviewAndRating[]
@@ -64,6 +64,12 @@ model ReviewAndRating {
   book      Book     @relation(fields: [bookId], references: [id])
 
   @@map("reviews_and_ratings")
+}
+
+model Order {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {

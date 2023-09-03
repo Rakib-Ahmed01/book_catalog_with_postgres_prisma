@@ -19,6 +19,9 @@ export const getSingleCategoryService = async (id: string) => {
     where: {
       id,
     },
+    include: {
+      books: true,
+    },
   });
 
   if (!category) {

@@ -11,7 +11,11 @@ export const createBookService = async (book: IBook) => {
 };
 
 export const getAllBooksService = async () => {
-  return await prisma.book.findMany();
+  return await prisma.book.findMany({
+    include: {
+      category: true,
+    },
+  });
 };
 
 export const getSingleBookService = async (id: string) => {

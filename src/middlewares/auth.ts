@@ -32,6 +32,10 @@ export const auth = (roles: ('admin' | 'customer')[]) => {
       if (!roles.includes('customer') && decodedData.role === 'customer') {
         return throwApiError(StatusCodes.FORBIDDEN, 'Forbidden');
       }
+
+      if (!roles.includes('admin') && decodedData.role === 'admin') {
+        return throwApiError(StatusCodes.FORBIDDEN, 'Forbidden');
+      }
     },
   );
 };
