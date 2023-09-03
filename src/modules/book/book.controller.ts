@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import { StatusCodes } from 'http-status-codes';
+import { BookFilterOptions } from '../../types/FilterOptions';
+import { PaginationOptions } from '../../types/PaginationOption';
+import { pickOptions } from '../../utils/pickOptions';
 import { sendResponse } from '../../utils/sendResponse';
 import { ICategory } from '../category/category.interface';
 import { IBook } from './book.interface';
@@ -27,8 +30,22 @@ export const createBook = expressAsyncHandler(
 );
 
 export const getAllBooks = expressAsyncHandler(
-  async (_req: Request, res: Response) => {
-    const books = await getAllBooksService();
+  async (req: Request, res: Response) => {
+    const paginationOptions = pickOptions(
+      req.query as Record<string, unknown>,
+      ['page', 'size', 'sortOrder', 'sortBy'],
+    ) as PaginationOptions;
+
+    const filters = pickOptions(req.query as Record<string, unknown>, [
+      'minPrice',
+      'maxPrice',
+      'title',
+      'author',
+      'genre',
+      'search',
+    ]) as BookFilterOptions;
+
+    const books = await getAllBooksService(paginationOptions, filters);
 
     sendResponse<ICategory>(res, {
       statusCode: StatusCodes.CREATED,

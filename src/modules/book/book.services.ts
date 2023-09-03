@@ -1,5 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
 import prisma from '../../lib/prisma';
+import { BookFilterOptions } from '../../types/FilterOptions';
+import { PaginationOptions } from '../../types/PaginationOption';
+import { calculateSkip } from '../../utils/calculateSkip';
+import { handleSearch } from '../../utils/handleSearch';
+import { handleSortByAndSortOrder } from '../../utils/handleSortByAndSortOrder';
 import { isEmptyObject } from '../../utils/isEmptyObject';
 import throwApiError from '../../utils/throwApiError';
 import { IBook } from './book.interface';
@@ -10,10 +15,28 @@ export const createBookService = async (book: IBook) => {
   });
 };
 
-export const getAllBooksService = async () => {
+export const getAllBooksService = async (
+  paginationOption: PaginationOptions,
+  filterOption: BookFilterOptions,
+) => {
+  const { page, size, skip } = calculateSkip(paginationOption);
+  const { sortBy, sortOrder } = handleSortByAndSortOrder(paginationOption);
+  const { search, ...filters } = filterOption;
+  const searchCondition = handleSearch(search, ['author', 'title', 'genre']);
+
+  console.log({ page, size, skip, sortBy, sortOrder, search, filters });
+
   return await prisma.book.findMany({
     include: {
       category: true,
+    },
+    take: size,
+    skip,
+    orderBy: {
+      [sortBy]: sortOrder,
+    },
+    where: {
+      AND: [searchCondition],
     },
   });
 };
