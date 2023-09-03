@@ -2,7 +2,9 @@ import { StatusCodes } from 'http-status-codes';
 import prisma from '../../lib/prisma';
 import { BookFilterOptions } from '../../types/FilterOptions';
 import { PaginationOptions } from '../../types/PaginationOption';
+import { PaginationResponse } from '../../types/PaginationResponse';
 import { calculateSkip } from '../../utils/calculateSkip';
+import { handleBookFilter } from '../../utils/handleFilters';
 import { handleSearch } from '../../utils/handleSearch';
 import { handleSortByAndSortOrder } from '../../utils/handleSortByAndSortOrder';
 import { isEmptyObject } from '../../utils/isEmptyObject';
@@ -12,39 +14,57 @@ import { IBook } from './book.interface';
 export const createBookService = async (book: IBook) => {
   return await prisma.book.create({
     data: book,
+    include: {
+      category: true,
+    },
   });
 };
 
 export const getAllBooksService = async (
   paginationOption: PaginationOptions,
   filterOption: BookFilterOptions,
-) => {
+): Promise<PaginationResponse<IBook[]>> => {
   const { page, size, skip } = calculateSkip(paginationOption);
   const { sortBy, sortOrder } = handleSortByAndSortOrder(paginationOption);
   const { search, ...filters } = filterOption;
   const searchCondition = handleSearch(search, ['author', 'title', 'genre']);
+  const filterObj = handleBookFilter(filters);
 
-  console.log({ page, size, skip, sortBy, sortOrder, search, filters });
+  const [books, total] = await Promise.all([
+    prisma.book.findMany({
+      include: {
+        category: true,
+      },
+      take: size,
+      skip,
+      orderBy: {
+        [sortBy]: sortOrder,
+      },
+      where: {
+        AND: [searchCondition, filterObj],
+      },
+    }),
+    prisma.book.count(),
+  ]);
 
-  return await prisma.book.findMany({
-    include: {
-      category: true,
+  return {
+    data: books as IBook[],
+    meta: {
+      page,
+      size,
+      total,
+      totalPage: Math.ceil(total / size),
     },
-    take: size,
-    skip,
-    orderBy: {
-      [sortBy]: sortOrder,
-    },
-    where: {
-      AND: [searchCondition],
-    },
-  });
+  };
 };
 
 export const getSingleBookService = async (id: string) => {
   const book = await prisma.book.findFirst({
     where: {
       id,
+    },
+    include: {
+      category: true,
     },
   });
 
@@ -69,6 +89,9 @@ export const getBooksByCategoryService = async (categoryId: string) => {
   const books = await prisma.book.findMany({
     where: {
       categoryId,
+    },
+    include: {
+      category: true,
     },
   });
 
@@ -98,6 +121,9 @@ export const updateBookService = async (
       id,
     },
     data: payload,
+    include: {
+      category: true,
+    },
   });
 };
 
@@ -115,6 +141,9 @@ export const deleteBookService = async (id: string) => {
   return await prisma.book.delete({
     where: {
       id,
+    },
+    include: {
+      category: true,
     },
   });
 };

@@ -24,7 +24,7 @@ export const createBook = expressAsyncHandler(
       statusCode: StatusCodes.CREATED,
       message: 'Book created successfully',
       success: true,
-      data: book,
+      data: book as IBook,
     });
   },
 );
@@ -45,13 +45,14 @@ export const getAllBooks = expressAsyncHandler(
       'search',
     ]) as BookFilterOptions;
 
-    const books = await getAllBooksService(paginationOptions, filters);
+    const result = await getAllBooksService(paginationOptions, filters);
 
     sendResponse<ICategory>(res, {
       statusCode: StatusCodes.CREATED,
       message: 'Books retrieved successfully',
       success: true,
-      data: books,
+      data: result.data,
+      meta: result.meta,
     });
   },
 );
@@ -79,7 +80,7 @@ export const getSingleBook = expressAsyncHandler(
       statusCode: StatusCodes.CREATED,
       message: 'Book retrieved successfully',
       success: true,
-      data: book,
+      data: book as IBook,
     });
   },
 );
@@ -93,7 +94,7 @@ export const updateBook = expressAsyncHandler(
       statusCode: StatusCodes.OK,
       message: 'Book updated successfully',
       success: true,
-      data: updatedBook,
+      data: updatedBook as IBook,
     });
   },
 );
@@ -107,7 +108,7 @@ export const deleteBook = expressAsyncHandler(
       statusCode: StatusCodes.OK,
       message: 'Book deleted successfully',
       success: true,
-      data: deletedBook,
+      data: deletedBook as IBook,
     });
   },
 );
