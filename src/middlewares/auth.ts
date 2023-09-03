@@ -22,7 +22,7 @@ export const auth = (roles: ('admin' | 'customer')[]) => {
         decodedData = jwt.verify(token, env.accessTokenSecret) as JwtPayload;
         req.jwtPayload = decodedData;
       } catch (error) {
-        throwApiError(StatusCodes.UNAUTHORIZED, 'Unauthorized');
+        throwApiError(StatusCodes.UNAUTHORIZED, 'Unauthorized Access');
       }
 
       if (roles.includes('admin') && decodedData.role === 'admin') {
@@ -34,11 +34,11 @@ export const auth = (roles: ('admin' | 'customer')[]) => {
       }
 
       if (!roles.includes('customer') && decodedData.role === 'customer') {
-        return throwApiError(StatusCodes.FORBIDDEN, 'Forbidden');
+        return throwApiError(StatusCodes.FORBIDDEN, 'Forbidden Access');
       }
 
       if (!roles.includes('admin') && decodedData.role === 'admin') {
-        return throwApiError(StatusCodes.FORBIDDEN, 'Forbidden');
+        return throwApiError(StatusCodes.FORBIDDEN, 'Forbidden Access');
       }
     },
   );

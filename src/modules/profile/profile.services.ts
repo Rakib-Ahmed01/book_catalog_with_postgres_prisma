@@ -16,5 +16,8 @@ export const getProfileService = async (jwtPayload: JwtPayload) => {
     throwApiError(StatusCodes.NOT_FOUND, 'Not found');
   }
 
-  return user;
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  const { password, ...withoutPassword } = user;
+
+  return withoutPassword;
 };

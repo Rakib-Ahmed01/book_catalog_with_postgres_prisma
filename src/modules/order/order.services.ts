@@ -34,8 +34,11 @@ export const getSingleOrderService = async (
     },
   });
 
-  if (order.userId !== jwtPayload.userId) {
-    throwApiError(StatusCodes.FORBIDDEN, 'Forbidden');
+  if (order?.userId !== jwtPayload.userId) {
+    throwApiError(
+      StatusCodes.FORBIDDEN,
+      "Forbidden Access. You can not access another user's orders",
+    );
   }
 
   if (!order) {
