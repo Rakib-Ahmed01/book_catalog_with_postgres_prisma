@@ -1,4 +1,4 @@
-### Live Link: https://book-catalog-with-prisma-rakib-ahmed01.vercel.app/api/v1/
+### Live Link: https://book-catalog-with-prisma-rakib-ahmed01.vercel.app/api/v1
 
 ### Application Routes:
 
