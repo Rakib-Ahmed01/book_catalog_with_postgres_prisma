@@ -14,7 +14,7 @@ export const getAllUsers = expressAsyncHandler(
   async (_req: Request, res: Response) => {
     const users = await getAllUsersService();
 
-    sendResponse<IUser>(res, {
+    sendResponse<Omit<IUser, 'password'>>(res, {
       statusCode: StatusCodes.CREATED,
       message: 'Users retrieved successfully',
       success: true,
@@ -28,7 +28,7 @@ export const getSingleUser = expressAsyncHandler(
     const { id } = req.params;
     const user = await getSingleUserService(id);
 
-    sendResponse<IUser>(res, {
+    sendResponse<Omit<IUser, 'password'>>(res, {
       statusCode: StatusCodes.CREATED,
       message: 'User retrieved successfully',
       success: true,
@@ -42,7 +42,7 @@ export const updateUser = expressAsyncHandler(
     const { id } = req.params;
     const updatedUser = await updateUserService(id, req.body);
 
-    sendResponse<IUser>(res, {
+    sendResponse<Omit<IUser, 'password'>>(res, {
       statusCode: StatusCodes.OK,
       message: 'User updated successfully',
       success: true,
@@ -56,7 +56,7 @@ export const deleteUser = expressAsyncHandler(
     const { id } = req.params;
     const deletedUser = await deleteUserService(id);
 
-    sendResponse<IUser>(res, {
+    sendResponse<Omit<IUser, 'password'>>(res, {
       statusCode: StatusCodes.OK,
       message: 'User deleted successfully',
       success: true,

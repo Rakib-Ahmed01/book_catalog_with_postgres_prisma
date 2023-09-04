@@ -7,7 +7,15 @@ import { IUser } from './user.interface';
 export const getAllUsersService = async () => {
   return await prisma.user.findMany({
     select: {
-      password: false,
+      id: true,
+      name: true,
+      address: true,
+      contactNo: true,
+      email: true,
+      profileImg: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 };
@@ -18,7 +26,15 @@ export const getSingleUserService = async (id: string) => {
       id,
     },
     select: {
-      password: false,
+      id: true,
+      name: true,
+      address: true,
+      contactNo: true,
+      email: true,
+      profileImg: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 
@@ -42,7 +58,15 @@ export const updateUserService = async (
       id,
     },
     select: {
-      password: false,
+      id: true,
+      name: true,
+      address: true,
+      contactNo: true,
+      email: true,
+      profileImg: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 
@@ -56,7 +80,15 @@ export const updateUserService = async (
     },
     data: payload,
     select: {
-      password: false,
+      id: true,
+      name: true,
+      address: true,
+      contactNo: true,
+      email: true,
+      profileImg: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 };
@@ -67,7 +99,15 @@ export const deleteUserService = async (id: string) => {
       id,
     },
     select: {
-      password: false,
+      id: true,
+      name: true,
+      address: true,
+      contactNo: true,
+      email: true,
+      profileImg: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 
@@ -80,7 +120,15 @@ export const deleteUserService = async (id: string) => {
       id,
     },
     select: {
-      password: false,
+      id: true,
+      name: true,
+      address: true,
+      contactNo: true,
+      email: true,
+      profileImg: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 };
