@@ -21,8 +21,8 @@ categoryRouter
 categoryRouter
   .route('/')
   .post(
-    validateRequest(createCategoryZodSchema),
     auth(['admin']),
+    validateRequest(createCategoryZodSchema),
     createCategory,
   )
   .get(getAllCategories);

@@ -46,7 +46,7 @@ export const getSingleCategory = expressAsyncHandler(
       statusCode: StatusCodes.CREATED,
       message: 'Category retrieved successfully',
       success: true,
-      data: category,
+      data: category as ICategory,
     });
   },
 );

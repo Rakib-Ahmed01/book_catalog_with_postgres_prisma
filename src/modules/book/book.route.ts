@@ -23,5 +23,5 @@ bookRouter
 
 bookRouter
   .route('/')
-  .post(validateRequest(createBookZodSchema), auth(['admin']), createBook)
+  .post(auth(['admin']), validateRequest(createBookZodSchema), createBook)
   .get(getAllBooks);
