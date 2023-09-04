@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import env from '../../config';
 import prisma from '../../lib/prisma';
 import { JwtPayload } from '../../types/JwtPayload';
+import { exlcudeFields } from '../../utils/excludeFields';
 import { generateJwtTokens } from '../../utils/generateJwtTokens';
 import throwApiError from '../../utils/throwApiError';
 import { IUser } from '../user/user.interface';
@@ -25,10 +26,7 @@ export const registerUserService = async (user: IUser) => {
     data: user,
   });
 
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  const { password, ...withoutPassword } = createdUser;
-
-  return withoutPassword;
+  return exlcudeFields(createdUser, ['password']);
 };
 
 export const loginUserService = async (payload: {

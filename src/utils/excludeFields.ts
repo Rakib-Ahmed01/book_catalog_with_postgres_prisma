@@ -4,8 +4,8 @@ export const exlcudeFields = <
 >(
   obj: T,
   keys: Key[],
-) => {
+): Omit<T, Key[][number]> => {
   return Object.fromEntries(
     Object.entries(obj).filter(([key]) => !keys.includes(key as Key)),
-  );
+  ) as Omit<T, Key>;
 };

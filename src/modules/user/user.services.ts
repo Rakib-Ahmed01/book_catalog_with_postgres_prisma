@@ -5,13 +5,20 @@ import throwApiError from '../../utils/throwApiError';
 import { IUser } from './user.interface';
 
 export const getAllUsersService = async () => {
-  return await prisma.user.findMany();
+  return await prisma.user.findMany({
+    select: {
+      password: false,
+    },
+  });
 };
 
 export const getSingleUserService = async (id: string) => {
   const user = await prisma.user.findFirst({
     where: {
       id,
+    },
+    select: {
+      password: false,
     },
   });
 
@@ -34,6 +41,9 @@ export const updateUserService = async (
     where: {
       id,
     },
+    select: {
+      password: false,
+    },
   });
 
   if (!user) {
@@ -45,6 +55,9 @@ export const updateUserService = async (
       id,
     },
     data: payload,
+    select: {
+      password: false,
+    },
   });
 };
 
@@ -52,6 +65,9 @@ export const deleteUserService = async (id: string) => {
   const user = await prisma.user.findFirst({
     where: {
       id,
+    },
+    select: {
+      password: false,
     },
   });
 
@@ -62,6 +78,9 @@ export const deleteUserService = async (id: string) => {
   return await prisma.user.delete({
     where: {
       id,
+    },
+    select: {
+      password: false,
     },
   });
 };
