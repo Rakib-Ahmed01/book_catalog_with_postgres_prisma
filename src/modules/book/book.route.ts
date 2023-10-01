@@ -15,13 +15,15 @@ export const bookRouter = express.Router();
 
 bookRouter.get('/:categoryId/category', getBooksByCategory);
 
+bookRouter.post(
+  '/create-book',
+  (auth(['admin']), validateRequest(createBookZodSchema), createBook),
+);
+
 bookRouter
   .route('/:id')
   .get(getSingleBook)
   .patch(auth(['admin']), updateBook)
   .delete(auth(['admin']), deleteBook);
 
-bookRouter
-  .route('/')
-  .post(auth(['admin']), validateRequest(createBookZodSchema), createBook)
-  .get(getAllBooks);
+bookRouter.route('/').get(getAllBooks);

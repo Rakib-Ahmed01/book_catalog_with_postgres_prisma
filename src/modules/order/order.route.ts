@@ -6,9 +6,13 @@ import { createOrderZodSchema } from './order.validation';
 
 export const orderRouter = express.Router();
 
+orderRouter.post(
+  '/create-order',
+  auth(['customer']),
+  validateRequest(createOrderZodSchema),
+  createOrder,
+);
+
 orderRouter.get('/:id', auth(['admin', 'customer']), getSingleOrder);
 
-orderRouter
-  .route('/')
-  .post(auth(['customer']), validateRequest(createOrderZodSchema), createOrder)
-  .get(auth(['admin', 'customer']), getAllOrders);
+orderRouter.route('/').get(auth(['admin', 'customer']), getAllOrders);

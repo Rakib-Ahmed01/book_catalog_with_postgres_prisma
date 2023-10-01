@@ -12,17 +12,17 @@ import { createCategoryZodSchema } from './category.validation';
 
 export const categoryRouter = express.Router();
 
+categoryRouter.post(
+  '/create-category',
+  auth(['admin']),
+  validateRequest(createCategoryZodSchema),
+  createCategory,
+);
+
 categoryRouter
   .route('/:id')
   .get(auth(['admin']), getSingleCategory)
   .patch(auth(['admin']), updateCategory)
   .delete(auth(['admin']), deleteCategory);
 
-categoryRouter
-  .route('/')
-  .post(
-    auth(['admin']),
-    validateRequest(createCategoryZodSchema),
-    createCategory,
-  )
-  .get(getAllCategories);
+categoryRouter.route('/').get(getAllCategories);
