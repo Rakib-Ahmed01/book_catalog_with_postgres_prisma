@@ -9,10 +9,9 @@ import throwApiError from '../utils/throwApiError';
 export const auth = (roles: ('admin' | 'customer')[]) => {
   return expressAsyncHandler(
     async (req: Request, _res: Response, next: NextFunction) => {
-      const authHeader = req.headers['authorization'];
-      const token = authHeader?.split(' ')[1];
+      const token = req.headers['authorization'];
 
-      if (!authHeader || !token) {
+      if (!token) {
         throwApiError(StatusCodes.UNAUTHORIZED, 'Missing Bearer Token');
       }
 
